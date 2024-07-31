@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>끝맛잇기</title>
+  </head>
+  <body>
+    <div><span id="order">1</span>참가자</div>
+    <div>제시어: <span id="word"></span></div>
+    <input type="text" /><button>입력</button>
+    <script>
+      // html을 보통 위-아래 실행되므로 prompt 맨 위에 적음
+      const number = Number(prompt("참가자는 몇 명인가요?"));
+      const $input = document.querySelector("input");
+      const $button = document.querySelector("button");
+      const $word = document.querySelector("#word"); // 제시어 -> 2
+      const $order = document.querySelector("#order"); // 순서 -> 1
+
+      // querySelectorAll을 쓸 땐, 노트리스트(배열같지만 배열은 아님)이므로 인덱스? 순서를 줘서 해결할 수 있음
+      /* 노드리스트 배열로 변환하는 방법
+      배열 변환:
+      Array.from($div)를 사용하여 NodeList를 배열로 변환한 후, map() 메서드를 사용할 수 있습니다.
+      forEach는 NodeList와 배열 모두에서 사용 가능한 메서드입니다. 모든 div 요소에 대해 clicked 클래스를 제거하는 데 사용됩니다.
+      클래스 토글:
+      클릭된 요소에 대해 e.target.classList.toggle("clicked")를 호출하여 clicked 클래스를 추가하거나 제거합니다.
+      이 두 가지 방법 중 하나를 사용하여 NodeList의 모든 요소에서 clicked 클래스를 제거하고, 클릭된 요소에 대해서만 clicked 클래스를 토글할 수 있습니다.
+      */
+
+      // 제시어 -> 1
+      let word;
+      // 현재 단어
+      let newWord;
+
+      const onInput = (event) => {
+        // 입력한 단어를 현재 단어로 저장
+        newWord = event.target.value;
+      };
+
+      const onClickButton = () => {
+        if (!word || word.at(-1) === newWord[0]) {
+          // 제시어가 빔
+          word = newWord; // 제시어 -> 3 : 입력한 단어가 제시어가 됨
+          $word.textContent = word; // 제시어 -> 4 : 화면에 제시어 표시
+
+          const order = Number($order.textContent); // 순서 -> 2
+          if (order + 1 > number) {
+            // 순서 -> 3
+            $order.textContent = 1;
+          } else {
+            $order.textContent = order + 1;
+          }
+        } else {
+          // 틀린 단어
+          alert("틀린 단어입니다!");
+        }
+        $input.value = ""; // 입력창을 비움
+        $input.focus();
+      };
+
+      // input 이벤트 연결
+      $input.addEventListener("input", onInput);
+      // click 이벤트 연결
+      $button.addEventListener("click", onClickButton);
+    </script>
+  </body>
+</html>

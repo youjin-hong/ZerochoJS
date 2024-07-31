@@ -1,0 +1,53 @@
+<!-- 시간 제한 주는 방법도 고안해보기 -->
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>쿵쿵따</title>
+  </head>
+  <body>
+    <div><span id="order">1</span>참가자</div>
+    <div>제시어: <span id="word"></span></div>
+    <input type="text" /><button>입력</button>
+    <script>
+      const number = Number(prompt("참가자는 몇 명인가요?"));
+      if (number) {
+        const $input = document.querySelector("input");
+        const $word = document.querySelector("#word");
+        const $order = document.querySelector("#order");
+        const $button = document.querySelector("button");
+
+        let word;
+        let newWord;
+
+        const onInput = (event) => {
+          newWord = event.target.value;
+        };
+
+        const onClickButton = () => {
+          if (newWord.length === 3 && (!word || word.at(-1) === newWord[0])) {
+            word = newWord;
+            $word.textContent = word;
+
+            const order = Number($order.textContent);
+            if (order + 1 > number) {
+              $order.textContent = 1;
+            } else {
+              $order.textContent = order + 1;
+            }
+          } else {
+            alert("틀린 단어입니다!");
+          }
+          $input.value = "";
+          $input.focus();
+        };
+
+        $input.addEventListener("input", onInput);
+        $button.addEventListener("click", onClickButton);
+      } else {
+        alert("참가자가 없어 게임을 시작할 수 없습니다.");
+      }
+    </script>
+  </body>
+</html>
