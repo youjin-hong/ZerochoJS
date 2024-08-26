@@ -18,18 +18,27 @@
     const $input = document.getElementById("input");
     const $logs = document.getElementById("logs");
 
+    // 배열에 1~9 숫자 담기
     let answerArr = [];
     for (let i = 0; i < 9; i++) {
       answerArr.push(i);
     }
+    // -------- 숫자야구의 정답 숫자 만들기 --------
+    // 9개의 숫자 중, 4개를 뽑아 담기 위해 빈 배열 추가 생성
     let answer = [];
     for (let j = 0; j < 4; j++) {
+      // Math.floor로 0부터 8까지의 인덱스를 무작위로 뽑음
+      // 9 대신 answerArr.length을 곱하여 숫자가 줄어서 발생하는 undefined 방지
       const index = Math.floor(Math.random() * answerArr.length);
+      // answerArr[index]로 해당 인덱스에 담긴 실제 숫자를 answer 배열에 push 함
       answer.push(answerArr[index]);
+      // 뽑은 숫자를 answerArr 배열에서 제거
       answerArr.splice(index, 1);
     }
     console.log(answer);
 
+    // -------- 입력값 받기 --------
+    // 입력값 받을 빈 배열 생성
     const tries = [];
     const checkInput = (input) => {
       if (input.length !== 4) {
@@ -42,8 +51,10 @@
         return alert("이미 시도한 값입니다.");
       }
       return true;
+      // return을 작성해주지 않으면 멈추지 않고 밑의 조건문들이 다 실행되어버림
     };
 
+    // -------- 확인 버튼 클릭 이벤트 --------
     $form.addEventListener("submit", (e) => {
       e.preventDefault();
       const value = $input.value;
@@ -62,6 +73,7 @@
         return;
       }
 
+      // 스트라이크, 볼, 아웃 수
       let strike = 0;
       let ball = 0;
       let out = 0;

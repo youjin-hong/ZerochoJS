@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>로또 추첨기</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        padding: 2rem;
+      }
+      input {
+        width: 60%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>로또 추첨기</h1>
+    <form id="form">
+      <input
+        id="input"
+        placeholder="숫자 6개를 입력해주세요 (예: 1, 2, 3, 4, 5 ,6)"
+      />
+      <button id="pick">추첨하기</button>
+    </form>
+    <div id="correct-num">당첨 숫자:</div>
+    <div id="bonus-num">보너스 숫자:</div>
+
+    <script>
+      const $form = document.getElementById("form");
+      const $input = document.getElementById("input");
+      const $pickBtn = document.getElementById("pick");
+      const $correctNum = document.getElementById("correct-num");
+      const $bonusNum = document.getElementById("bonus-num");
+
+      $form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const value = $input.value;
+
+        // 엔터 눌러도 제출되게
+        if (e.key === "Enter") $input.value = "";
+
+        // 숫자를 입력하지 않았을 때
+        if (!value.trim()) return alert("1~45 사이의 숫자를 입력하세요");
+
+        // 1~45 숫자가 아닐 때
+        if (value > 45 || value < 1)
+          return alert("1~45 사이의 값을 입력하세요");
+
+        // 6자리를 입력하지 않았을 때(쉼표x, 6자리 미만 또는 6자리 초과)
+        let valueArr = value.split(",").map((i) => parseInt(i.trim()));
+        if (new Set(valueArr).size !== 6)
+          return alert("숫자가 중복되었습니다.");
+
+        // 중복된 숫자를 입력했을 때
+        if (valueArr.length !== 6)
+          return alert("1~45 사이의 숫자 6개를 입력하세요");
+        0;
+      });
+    </script>
+  </body>
+</html>
