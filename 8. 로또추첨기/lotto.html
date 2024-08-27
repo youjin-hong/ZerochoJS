@@ -41,6 +41,7 @@
         e.preventDefault();
 
         const value = $input.value;
+        $input.value = "";
 
         // 엔터 눌러도 제출되게
         if (e.key === "Enter") $input.value = "";
@@ -60,7 +61,40 @@
         // 중복된 숫자를 입력했을 때
         if (valueArr.length !== 6)
           return alert("1~45 사이의 숫자 6개를 입력하세요");
-        0;
+
+        const candidate = Array(45)
+          .fill()
+          .map((item, index) => index + 1);
+        const shuffle = [];
+        while (candidate.length > 0) {
+          // 배열에서 무작위로 인덱스 뽑기
+          const random = Math.floor(Math.random() * candidate.length);
+          // 뽑은 값을 새로운 배열에 넣기 -> splice는 기존 배열의 값을 바꿈
+          const spliceArray = candidate.splice(random, 1);
+          // 새로운 배열에 들어있는 값 꺼내기
+          const value = spliceArray[0];
+          // 꺼낸 값을 shuffle 배열에 넣기
+          shuffle.push(value);
+        }
+        console.log(shuffle);
+        const winBalls = shuffle.slice(0, 6).sort((a, b) => a - b);
+        const bonus = shuffle[6];
+        console.log(winBalls, bonus);
+        // 뽑은 공을 화면에 1초 간격을 두고 표시하기
+        for (let i = 0; i < winBalls.length; i++) {
+          setTimeout(() => {
+            const $ball = document.createElement("div");
+            $ball.classList.add("ball");
+            $ball.textContent = winBalls[i];
+            $correctNum.appendChild($ball);
+          }, 1000 * (i + 1));
+        }
+        setTimeout(() => {
+          const $ball = document.createElement("div");
+          $ball.classList.add("ball");
+          $ball.textContent = bonus;
+          $correctNum.appendChild($ball);
+        }, 7000);
       });
     </script>
   </body>
