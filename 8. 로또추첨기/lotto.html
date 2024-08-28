@@ -69,8 +69,10 @@
         while (candidate.length > 0) {
           // 배열에서 무작위로 인덱스 뽑기
           const random = Math.floor(Math.random() * candidate.length);
+
           // 뽑은 값을 새로운 배열에 넣기 -> splice는 기존 배열의 값을 바꿈
           const spliceArray = candidate.splice(random, 1);
+
           // 새로운 배열에 들어있는 값 꺼내기
           const value = spliceArray[0];
           // 꺼낸 값을 shuffle 배열에 넣기
