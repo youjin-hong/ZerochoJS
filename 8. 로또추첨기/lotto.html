@@ -80,20 +80,23 @@
         const winBalls = shuffle.slice(0, 6).sort((a, b) => a - b);
         const bonus = shuffle[6];
         console.log(winBalls, bonus);
+
+        function drawBall(number, $parent) {
+          const $ball = document.createElement("div");
+          $ball.classList.add("ball");
+          $ball.textContent = number;
+          $parent.appendChild($ball);
+        }
+
         // 뽑은 공을 화면에 1초 간격을 두고 표시하기
         for (let i = 0; i < winBalls.length; i++) {
           setTimeout(() => {
-            const $ball = document.createElement("div");
-            $ball.classList.add("ball");
-            $ball.textContent = winBalls[i];
-            $correctNum.appendChild($ball);
+            drawBall(winBalls[i], $correctNum);
           }, 1000 * (i + 1));
         }
+
         setTimeout(() => {
-          const $ball = document.createElement("div");
-          $ball.classList.add("ball");
-          $ball.textContent = bonus;
-          $correctNum.appendChild($ball);
+          drawBall(bonus, $bonusNum);
         }, 7000);
       });
     </script>
