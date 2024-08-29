@@ -62,6 +62,7 @@
         if (valueArr.length !== 6)
           return alert("1~45 사이의 숫자 6개를 입력하세요");
 
+        // 셔플 알고리즘
         const candidate = Array(45)
           .fill()
           .map((item, index) => index + 1);
@@ -83,6 +84,7 @@
         const bonus = shuffle[6];
         console.log(winBalls, bonus);
 
+        // 중복되는 부분 함수로 분리 -> 로또 추첨볼 컴포넌트 만들고, 숫자 부여
         function drawBall(number, $parent) {
           const $ball = document.createElement("div");
           $ball.classList.add("ball");
