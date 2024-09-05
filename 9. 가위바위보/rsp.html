@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>가위바위보 게임</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      #computer {
+        width: 165px;
+        height: 200px;
+        margin-bottom: 2rem;
+      }
+      main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+      main {
+        margin: auto;
+      }
+      .btn {
+        border: none;
+        background-color: beige;
+        width: 100px;
+        height: 50px;
+      }
+      .btn:hover {
+        background-color: antiquewhite;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div id="computer"></div>
+      <div>
+        <button id="scissors" class="btn">가위</button>
+        <button id="rock" class="btn">바위</button>
+        <button id="paper" class="btn">보</button>
+      </div>
+      <div id="result"></div>
+      <div>
+        현재까지 <span id="win">0</span> 승 / <span id="lose">0</span>패
+      </div>
+      <div>내 점수: <span id="score">0</span>점</div>
+    </main>
+    <script>
+      const $computer = document.getElementById("computer");
+      const $result = document.getElementById("result");
+      const $win = document.getElementById("win");
+      const $lose = document.getElementById("lose");
+      const $score = document.getElementById("score");
+      const $rock = document.getElementById("rock");
+      const $scissors = document.getElementById("scissors");
+      const $paper = document.getElementById("paper");
+
+      const IMG_URL = "./rsp.png";
+
+      let win = 0;
+      let lose = 0;
+      let score = 0;
+
+      //backgroundSize 속성은 항상 background와 세트로 움직여야 함
+      $computer.style.background = `url(${IMG_URL}) 0 0`;
+      $computer.style.backgroundSize = `auto 200px`;
+
+      // 가위, 바위, 보의 위치를 x좌표로 표시하여 객체로 묶기
+      const rspX = {
+        scissors: "0",
+        rock: "-220px",
+        paper: "-440px",
+      };
+
+      /*
+          컴퓨터 ||  가위 | 바위 | 보
+          사용자
+          -----
+          가위      0       1      2
+           --
+          바위     -1       0      1
+           --
+           보      -2      -1      0
+          */
+      // 내가 이기면 -1 또는 2 / 내가 지면 1 또는 -2 / 무승부면 0
+      const choiceTable = {
+        scissors: 1,
+        rock: 0,
+        paper: -1,
+      };
+
+      // 초기값
+      let computerChoice = "scissors";
+      // 가위 바위 보 이미지를 바꾸는 함수 (순서 정하기)
+      const changeComputerHand = () => {
+        if (computerChoice === "scissors") {
+          computerChoice = "rock";
+        } else if (computerChoice === "rock") {
+          computerChoice = "paper";
+        } else if (computerChoice === "paper") {
+          computerChoice = "scissors";
+        }
+
+        $computer.style.background = `url(${IMG_URL}) ${rspX[computerChoice]} 0`;
+        $computer.style.backgroundSize = `auto 200px`;
+      };
+
+      let intervalId = setInterval(changeComputerHand, 50);
+
+      // 버튼을 클릭한 동안에는 false로 만들어서 이벤트를 제거하는 변수
+      // 이벤트를 제거하는 대신에 함수에 아무 일도 일어나지 않게 하는 방법
+      // removeEventListener 대체 방법
+      let checkClick = true;
+      const clickButton = () => {
+        if (checkClick) {
+          clearInterval(intervalId);
+          checkClick = false;
+
+          const myChoice =
+            event.target.id === "scissors"
+              ? "scissors"
+              : event.target.id === "rock"
+              ? "rock"
+              : "paper";
+
+          // js에서는 객체의 키가 문자열로 저장되는데, 음수 키로 사용하면 문자열로 자동 변환 해주지 않으므로
+          // 명시적으로 강제 형 변환
+          const resultTable = {
+            0: { text: "비겼다", winChange: 0, loseChange: 0, scoreChange: 0 },
+            1: { text: "이겼따!", winChange: 1, loseChange: 0, scoreChange: 1 },
+            "-2": {
+              text: "이겼따!",
+              winChange: 1,
+              loseChange: 0,
+              scoreChange: 1,
+            },
+            2: { text: "졌따..", winChange: 0, loseChange: 1, scoreChange: -1 },
+            "-1": {
+              text: "졌다",
+              winChange: 0,
+              loseChange: 1,
+              scoreChange: -1,
+            },
+          };
+
+          // 컴퓨터 vs 나 대결 결과 계산
+          const diff = choiceTable[computerChoice] - choiceTable[myChoice];
+          const result = resultTable[diff];
+
+          // 결과 점수 계산
+          $result.textContent = result.text;
+          win += result.winChange;
+          lose += result.loseChange;
+          score += result.scoreChange;
+
+          // 화면에 결과 렌더링
+          $win.innerHTML = win;
+          $lose.textContent = lose;
+          $score.innerHTML = score;
+
+          // 1초 지나면 다시 컴퓨터 손 모양 변경 시작
+          setTimeout(() => {
+            checkClick = true; // 다시 클릭 가능하도록 플래그 변경
+            intervalId = setInterval(changeComputerHand, 50); // 손 모양 변경 재시작
+          }, 1000);
+        }
+      };
+
+      $rock.addEventListener("click", clickButton);
+      $scissors.addEventListener("click", clickButton);
+      $paper.addEventListener("click", clickButton);
+    </script>
+  </body>
+</html>
